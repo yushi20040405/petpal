@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>🐾 萌宠伴侣</h1>
+  <p class="subtitle">勾选会出现在新标签页的小动物（可多选）</p>
+  <p class="stats" id="stats"></p>
+
+  <label class="float-toggle">
+    <input type="checkbox" id="show-float" />
+    <span>显示悬浮宠物（网页右下角）</span>
+  </label>
+
+  <label class="float-toggle">
+    <input type="checkbox" id="do-not-disturb" />
+    <span>免打扰（仅保留饥饿/口渴提醒）</span>
+  </label>
+
+  <label class="float-toggle">
+    <input type="checkbox" id="proactive-chat" />
+    <span>主动聊天（不定时来找你说话）</span>
+  </label>
+
+  <div class="toolbar">
+    <button id="select-all" type="button">全选</button>
+    <button id="clear-all" type="button">清空</button>
+    <button id="reset-data" type="button" class="danger">重置数据</button>
+  </div>
+
+  <div class="pet-grid" id="pet-grid"></div>
+
+  <p class="status" id="status"></p>
+
+  <script src="pets.js"></script>
+  <script src="companion.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

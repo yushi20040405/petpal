@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "新标签页萌宠伴侣",
+  "version": "1.5.0",
+  "description": "新标签页 + 全网页悬浮萌宠伴侣。支持喂食/喂水/玩耍/清洁/治疗/休息、食物偏好、主动聊天、情绪与主动小动作、亲密度成长。",
+  "permissions": ["storage"],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["pets.js", "food.js", "companion.js", "preferences.js", "chat.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*.svg", "food/*.svg", "water/*.svg", "emotion/*.svg", "onther/*.svg"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "萌宠伴侣设置",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

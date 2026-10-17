@@ -1,0 +1,169 @@
+/* ============================================================
+   新标签页萌宠伴侣 - popup.css（自由选择版）
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  background: #fdf6ec;
+  color: #5b4a3f;
+  padding: 14px 16px 16px;
+}
+
+h1 {
+  font-size: 17px;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #b79a8c;
+  text-align: center;
+  margin: 4px 0 12px;
+}
+
+/* 顶部操作按钮 */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.toolbar button {
+  flex: 1;
+  padding: 6px 0;
+  border: 1px solid #f0d9b8;
+  border-radius: 10px;
+  background: #fff;
+  color: #7a5c4f;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toolbar button:hover {
+  background: #fff7ec;
+  border-color: #f5a623;
+}
+.toolbar button.danger {
+  color: #d9534f;
+  border-color: #f3c6c2;
+}
+.toolbar button.danger:hover {
+  background: #fdf2f1;
+  border-color: #d9534f;
+}
+
+/* 宠物网格 */
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.pet-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pet-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.pet-card img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.pet-card .name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #7a5c4f;
+}
+
+.pet-card .check {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f5a623;
+  color: #fff;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.15s ease;
+}
+
+.pet-card.active {
+  border-color: #f5a623;
+  background: #fff7ec;
+}
+
+.pet-card.active .check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.status {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #b79a8c;
+}
+
+/* 悬浮宠物开关 */
+.float-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  margin: 0 0 10px;
+  background: #fff;
+  border: 1px solid #f0d9b8;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #7a5c4f;
+  user-select: none;
+}
+.float-toggle input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* 陪伴状态统计行 */
+.stats {
+  text-align: center;
+  font-size: 12px;
+  color: #c9973f;
+  background: #fff7ec;
+  border: 1px solid #f0d9b8;
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin: 0 0 10px;
+}

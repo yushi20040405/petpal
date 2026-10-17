@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>萌宠伴侣 · Chrome 新标签页宠物扩展</title>
+  <meta name="description" content="每次打开新标签页，都有一只小可爱等你。支持猫、狗、兔子，可喂食、喂水、聊天、陪伴浏览。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============ 顶部导航栏 ============ -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-wrap">
+      <!-- Logo：内联 SVG 小动物 + 产品名 -->
+      <a class="logo" href="#hero" aria-label="萌宠伴侣 首页">
+        <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffb347"/>
+              <stop offset="1" stop-color="#ff7e5f"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="24" r="22" fill="#fff7ec" stroke="#ffe0c2" stroke-width="2"/>
+          <path d="M12 26 Q12 14 24 14 Q36 14 36 26 Z" fill="url(#logoGrad)"/>
+          <path d="M15 13 L17 8 L20 12 Z" fill="url(#logoGrad)"/>
+          <path d="M28 12 L31 8 L33 13 Z" fill="url(#logoGrad)"/>
+          <circle cx="18" cy="24" r="2" fill="#5b4a3f"/>
+          <circle cx="30" cy="24" r="2" fill="#5b4a3f"/>
+          <path d="M22 30 Q24 32 26 30" stroke="#5b4a3f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <circle cx="14" cy="28" r="1.8" fill="#ffb0a0"/>
+          <circle cx="34" cy="28" r="1.8" fill="#ffb0a0"/>
+        </svg>
+        <span class="logo-text">萌宠伴侣</span>
+      </a>
+
+      <!-- 汉堡按钮（移动端） -->
+      <button class="nav-toggle" id="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- 锚点导航 -->
+      <nav class="site-nav" id="site-nav">
+        <a href="#intro" class="nav-link">产品介绍</a>
+        <a href="#features" class="nav-link">核心功能</a>
+        <a href="#install" class="nav-link">安装步骤</a>
+        <a href="#download" class="nav-link nav-cta">下载插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ Hero 首屏区 ============ -->
+    <section class="hero" id="hero">
+      <!-- 背景装饰光斑 -->
+      <div class="hero-blob hero-blob--1" aria-hidden="true"></div>
+      <div class="hero-blob hero-blob--2" aria-hidden="true"></div>
+      <div class="hero-blob hero-blob--3" aria-hidden="true"></div>
+
+      <div class="container hero-grid">
+        <!-- 文案 -->
+        <div class="hero-copy reveal">
+          <h1 class="hero-title">每次打开新标签页，<br>都有一只<span class="highlight">小可爱</span>等你</h1>
+          <p class="hero-subtitle">支持猫、狗、兔子，可喂食、喂水、聊天、陪伴浏览，让枯燥的浏览器多一份温度。</p>
+          <div class="hero-actions">
+            <a href="#download" class="btn btn-primary">立即安装</a>
+            <a href="#features" class="btn btn-ghost">查看功能</a>
+          </div>
+        </div>
+
+        <!-- 新标签页示意：浏览器窗口 + 宠物 + 气泡 + 功能按钮 -->
+        <div class="hero-mockup reveal" aria-hidden="true">
+          <div class="browser">
+            <div class="browser-bar">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span class="browser-url">新标签页</span>
+            </div>
+            <div class="browser-body">
+              <!-- 气泡：位于宠物上方，样式与扩展一致 -->
+              <div class="pet-bubble">嗨～今天也要加油哦</div>
+
+              <!-- 宠物：白熊（assets/baixiong.svg） -->
+              <img class="pet-cat" src="../assets/baixiong.svg" alt="白熊">
+
+              <!-- 环形功能菜单：与扩展一致的 6 个按钮 -->
+              <div class="ring-menu">
+                <button class="ring-btn" type="button" style="--i:0"><span class="ring-btn-inner"><img src="../onther/宠粮主食.svg" alt="喂食"></span><span class="ring-label">喂食</span></button>
+                <button class="ring-btn" type="button" style="--i:1"><span class="ring-btn-inner"><img src="../onther/食具水具.svg" alt="喂水"></span><span class="ring-label">喂水</span></button>
+                <button class="ring-btn" type="button" style="--i:2"><span class="ring-btn-inner"><img src="../onther/玩具逗宠.svg" alt="玩耍"></span><span class="ring-label">玩耍</span></button>
+                <button class="ring-btn" type="button" style="--i:3"><span class="ring-btn-inner"><img src="../onther/如厕清洁.svg" alt="清洁"></span><span class="ring-label">清洁</span></button>
+                <button class="ring-btn" type="button" style="--i:4"><span class="ring-btn-inner"><img src="../onther/绝育手术.svg" alt="治疗"></span><span class="ring-label">治疗</span></button>
+                <button class="ring-btn" type="button" style="--i:5"><span class="ring-btn-inner"><img src="../onther/窝垫笼舍.svg" alt="休息"></span><span class="ring-label">休息</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 产品介绍区 ============ -->
+    <section class="section intro" id="intro">
+      <div class="container">
+        <h2 class="section-title reveal">让新标签页，不再千篇一律</h2>
+        <p class="section-lead reveal">浏览器的新标签页本该是工具，却常常是一片空白。我们把它变成一个随时欢迎你的小窝——打开就有小动物迎接，陪你工作、陪你发呆。</p>
+
+        <div class="intro-grid">
+          <div class="intro-card reveal">
+            <span class="intro-icon"><img src="../webassets/毛绒熊.svg" alt=""></span>
+            <h3>告别空白页</h3>
+            <p>每次新建标签页，随机一只小猫、小狗或小兔子出现在你面前，给浏览带来一点小惊喜。</p>
+          </div>
+          <div class="intro-card reveal">
+            <span class="intro-icon"><img src="../webassets/手机.svg" alt=""></span>
+            <h3>多一点陪伴感</h3>
+            <p>摸摸头、喂点好吃的、聊几句，小动物会记住你，亲密度一天天成长，像真的养了一只宠物。</p>
+          </div>
+          <div class="intro-card reveal">
+            <span class="intro-icon"><img src="../webassets/搜索.svg" alt=""></span>
+            <h3>走到哪都在</h3>
+            <p>就算去别的网页，它也会漂浮在角落陪你，不打断你的工作，只在需要时轻轻打个招呼。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 核心功能展示区 ============ -->
+    <section class="section features" id="features">
+      <div class="container">
+        <h2 class="section-title reveal">核心功能</h2>
+        <p class="section-lead reveal">一只会吃、会喝、会撒娇、会聊天的小动物，都装进了你的浏览器里。</p>
+
+        <div class="features-grid">
+          <article class="feature-card reveal">
+            <span class="feature-icon"><img src="../webassets/卷毛狗.svg" alt=""></span>
+            <h3>随机宠物</h3>
+            <p>猫、狗、兔子随机出现，每次打开都有不同的小可爱迎接你。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="feature-icon"><img src="../onther/训练社交.svg" alt=""></span>
+            <h3>点击互动</h3>
+            <p>点击宠物弹出环形功能菜单，摸摸头会冒爱心，还有可爱的小动画。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="feature-icon"><img src="../onther/零食罐头.svg" alt=""></span>
+            <h3>喂食喂水</h3>
+            <p>横向滑动的食物列表，从鱼干到奶茶应有尽有，吃饱喝足心情更好。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="feature-icon"><img src="../onther/疫苗驱虫.svg" alt=""></span>
+            <h3>状态气泡</h3>
+            <p>饿了、渴了、开心还是生气，都会用气泡告诉你它的真实状态。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="feature-icon"><img src="../onther/上门遛狗.svg" alt=""></span>
+            <h3>主动聊天</h3>
+            <p>它会不定时来找你说话，多种对话选项，陪你聊上一小会儿。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="feature-icon"><img src="../onther/窝垫笼舍.svg" alt=""></span>
+            <h3>悬浮陪伴</h3>
+            <p>浏览任何网页时，小动物都漂浮在角落，安静陪着你，不挡事。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 安装步骤说明区 ============ -->
+    <section class="section install" id="install">
+      <div class="container">
+        <h2 class="section-title reveal">四步装好，马上开养</h2>
+        <p class="section-lead reveal">无需商店审核，本地加载即可使用，全程不到一分钟。</p>
+
+        <ol class="steps">
+          <li class="step-card reveal">
+            <span class="step-num">1</span>
+            <h3>下载并解压</h3>
+            <p>下载插件压缩包，解压到一个固定的本地文件夹。</p>
+          </li>
+          <li class="step-card reveal">
+            <span class="step-num">2</span>
+            <h3>打开扩展管理页</h3>
+            <p>打开 Chrome，在地址栏输入 <code>chrome://extensions</code> 回车。</p>
+          </li>
+          <li class="step-card reveal">
+            <span class="step-num">3</span>
+            <h3>开启开发者模式</h3>
+            <p>打开页面右上角的「开发者模式」开关。</p>
+          </li>
+          <li class="step-card reveal">
+            <span class="step-num">4</span>
+            <h3>加载扩展</h3>
+            <p>点击「加载已解压的扩展程序」，选择刚才解压出来的文件夹即可。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ 底部 CTA ============ -->
+    <section class="section cta" id="download">
+      <div class="container cta-inner reveal">
+        <h2>准备好迎接你的小可爱了吗？</h2>
+        <p>点击下方按钮下载插件，开始你的云端养宠生活。</p>
+        <!-- TODO: 替换为真实的插件下载链接 -->
+        <a href="#" class="btn btn-primary btn-lg" id="download-btn">下载插件</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <p class="footer-copy">© 2026 萌宠伴侣 · petpal</p>
+      <p class="footer-links">
+        <!-- TODO: 替换为真实 GitHub 仓库地址 -->
+        <a href="#" class="footer-link">GitHub</a>
+        <span class="footer-dot">·</span>
+        <span>支持 Chrome 桌面版</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1003 @@
+/* ============================================================
+   悬浮宠物挂件 - content.css
+   全部选择器以 .pet-float 开头，避免污染宿主网页样式；
+   关键帧用 pf- 前缀，避免与网页自身的 @keyframes 冲突。
+   ============================================================ */
+
+/* 悬浮容器：固定右下角，极高层级，可拖动 */
+.pet-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 120px;
+  height: 120px;
+  z-index: 2147483647;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none; /* 触屏拖动时不触发页面滚动 */
+  transition: width 0.2s ease, height 0.2s ease;
+}
+
+.pet-float.dragging {
+  cursor: grabbing;
+}
+
+/* 全屏时隐藏 */
+.pet-float.fs-hidden {
+  display: none;
+}
+
+/* 收起状态：只保留一个小圆点（右上角按钮） */
+.pet-float.collapsed {
+  width: 28px;
+  height: 28px;
+}
+.pet-float.collapsed .pet-float-body {
+  display: none;
+}
+.pet-float.collapsed .pet-float-toggle {
+  width: 28px;
+  height: 28px;
+  top: 0;
+  right: 0;
+  font-size: 14px;
+}
+
+/* 收起 / 展开按钮（右上角小圆点） */
+.pet-float-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  color: #7a5c4f;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.pet-float-toggle:hover {
+  background: #fff;
+}
+
+/* 主体 */
+.pet-float-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 动画层统一居中 */
+.pet-float .pet-breathe,
+.pet-float .pet-blink,
+.pet-float .pet-bounce,
+.pet-float .pet-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 内联 SVG 尺寸 */
+.pet-float .pet-svg svg {
+  width: 120px;
+  height: 120px;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  transition: transform 0.18s ease;
+}
+
+/* 悬停：轻微放大 */
+.pet-float:hover .pet-svg svg {
+  transform: scale(1.06);
+}
+
+/* ------------------------------------------------------------
+   动画一：呼吸浮动（悬停时更快、幅度更大）
+   ------------------------------------------------------------ */
+.pet-float .pet-breathe {
+  transform-origin: 50% 100%;
+  animation: pf-breathe 3s ease-in-out infinite;
+}
+.pet-float:hover .pet-breathe {
+  animation: pf-breatheFast 1.6s ease-in-out infinite;
+}
+@keyframes pf-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-5px) scale(1.015); }
+}
+@keyframes pf-breatheFast {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-9px) scale(1.03); }
+}
+
+/* ------------------------------------------------------------
+   动画二：眨眼（整体兜底 + 真实眼睛两套方案）
+   ------------------------------------------------------------ */
+.pet-float .pet-blink {
+  transform-origin: 50% 50%;
+  animation: pf-blink 4.4s ease-in-out infinite;
+}
+.pet-float:hover .pet-blink {
+  animation: pf-blink 2.2s ease-in-out infinite;
+}
+@keyframes pf-blink {
+  0%, 88%, 100% { transform: scaleY(1); }
+  92%           { transform: scaleY(0.92); }
+  96%           { transform: scaleY(1); }
+}
+.pet-float.has-eyes .pet-blink {
+  animation: none;
+}
+.pet-float #pet-eye-left,
+.pet-float #pet-eye-right {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pf-blinkEye 4.4s ease-in-out infinite;
+}
+.pet-float:hover #pet-eye-left,
+.pet-float:hover #pet-eye-right {
+  animation: pf-blinkEye 2.2s ease-in-out infinite;
+}
+@keyframes pf-blinkEye {
+  0%, 88%, 100% { transform: scaleY(1); }
+  91%           { transform: scaleY(0.15); }
+  94%           { transform: scaleY(1); }
+}
+
+/* ------------------------------------------------------------
+   动画三：角落星形装饰
+   ------------------------------------------------------------ */
+.pet-float #pet-star-left,
+.pet-float #pet-star-right-top,
+.pet-float #pet-star-right-gold {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pf-starTwinkle 2.8s ease-in-out infinite;
+}
+.pet-float #pet-star-right-top { animation-delay: 0.5s; }
+.pet-float #pet-star-right-gold { animation-delay: 1s; }
+@keyframes pf-starTwinkle {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+  50%      { transform: translateY(-16px) scale(0.7) rotate(20deg); opacity: 0.4; }
+}
+
+/* ------------------------------------------------------------
+   动画四：点击弹跳
+   ------------------------------------------------------------ */
+.pet-float .pet-bounce {
+  transform-origin: 50% 50%;
+}
+.pet-float.bounce .pet-bounce {
+  animation: pf-bounce 0.55s ease;
+}
+@keyframes pf-bounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.12); }
+  55%  { transform: scale(0.94); }
+  75%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ------------------------------------------------------------
+   点击时腮红变红
+   ------------------------------------------------------------ */
+.pet-float #pet-blush-left path,
+.pet-float #pet-blush-right path {
+  transition: fill 1.2s ease;
+}
+.pet-float.blushing #pet-blush-left path,
+.pet-float.blushing #pet-blush-right path {
+  fill: #FF8F87;
+  transition: fill 0.4s ease;
+}
+
+/* ------------------------------------------------------------
+   爱心 / 星星特效层
+   ------------------------------------------------------------ */
+.pet-float .pet-fx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 4;
+}
+.pet-float .fx {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  animation: pf-fxFloat 1.1s ease-out forwards;
+  will-change: transform, opacity;
+}
+@keyframes pf-fxFloat {
+  0%   { transform: translate(-50%, -50%) scale(0.4) rotate(0deg); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, -90px))) scale(1.1) rotate(var(--rot, 20deg)); opacity: 0; }
+}
+
+/* ------------------------------------------------------------
+   气泡提示
+   ------------------------------------------------------------ */
+.pet-float .pet-bubble {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #f0d9c8;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #7a5c4f;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 6;
+  pointer-events: none;
+}
+.pet-float .pet-bubble[hidden] {
+  display: none;
+}
+.pet-float .pet-bubble.clickable {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.pet-float .pet-bubble.clickable:hover {
+  background: #fff8f3;
+}
+.pet-float .pet-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #fff;
+}
+.pet-float .pet-bubble.show {
+  animation: pf-bubblePop 0.25s ease;
+}
+@keyframes pf-bubblePop {
+  0%   { transform: translateX(-50%) scale(0.6); opacity: 0; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+/* 淡出：隐藏前先缩小 + 淡出，避免突兀消失 */
+.pet-float .pet-bubble.hide {
+  animation: pf-bubbleFadeOut 0.2s ease forwards;
+}
+@keyframes pf-bubbleFadeOut {
+  to { opacity: 0; transform: translateX(-50%) scale(0.88); }
+}
+
+/* ------------------------------------------------------------
+   食物面板（点击环形菜单“喂食/喂水”后弹出）
+   ------------------------------------------------------------ */
+/* 食物面板：默认隐藏，展开时淡入上移；圆角 + 阴影，不遮挡宠物本身
+   横向滚动：flex 单行不换行，超出宽度后左右滑动 */
+.pet-float .pet-food-panel {
+  position: absolute;
+  bottom: calc(100% + 8px);   /* 面板在宠物上方展开，不遮挡宠物 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: nowrap;             /* 卡片不换行，保持单行横向 */
+  gap: 8px;
+  padding: 10px;
+  max-width: min(72vw, 260px);   /* 限制宽度，超出后横向滚动 */
+  overflow-x: auto;              /* 横向滚动 */
+  scrollbar-width: none;         /* Firefox 隐藏滚动条 */
+  -ms-overflow-style: none;      /* 旧版 Edge 隐藏滚动条 */
+  scroll-snap-type: x mandatory; /* 卡片吸附对齐，滑动更顺滑 */
+  -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  z-index: 7;
+}
+/* 隐藏横向滚动条，保持界面干净，但保留滑动能力 */
+.pet-float .pet-food-panel::-webkit-scrollbar {
+  display: none;
+}
+.pet-float .pet-food-panel::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.97);
+}
+.pet-float .pet-food-panel[hidden] {
+  display: none;
+}
+.pet-float .pet-food-panel.show {
+  animation: pf-panelIn 0.18s ease;
+}
+@keyframes pf-panelIn {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.94); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* 单个食物卡片：图标 + 名称，纵向排列，悬停轻微放大 */
+.pet-float .food-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 52px;
+  position: relative;       /* 供右上角「食/饮」角标定位 */
+  flex: 0 0 auto;            /* 固定宽度，不缩放，配合横向滚动 */
+  scroll-snap-align: start;  /* 吸附到滚动起点 */
+  padding: 6px 3px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.pet-float .food-card:hover {
+  transform: translateY(-2px) scale(1.06);
+  background: rgba(255, 183, 125, 0.14);
+}
+.pet-float .food-card-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pet-float .food-card-icon svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+  pointer-events: none; /* 点击落到卡片按钮本身 */
+}
+.pet-float .food-card-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.pet-float .food-card-name {
+  font-size: 11px;
+  color: #7a5c4f;
+  white-space: nowrap;
+}
+/* 食物/饮品小角标：食（橙）/ 饮（蓝） */
+.pet-float .food-card-badge {
+  position: absolute;
+  top: 0;
+  right: 1px;
+  font-size: 9px;
+  line-height: 1;
+  padding: 1px 4px;
+  border-radius: 7px;
+  color: #fff;
+  background: #7ec8f0;
+  pointer-events: none;
+}
+.pet-float .food-card[data-kind='food'] .food-card-badge {
+  background: #f4a86d;
+}
+
+/* ------------------------------------------------------------
+   吃东西动画：身体轻弹 + 嘴巴开合（如有）+ 头部点动（如有）
+   ------------------------------------------------------------ */
+.pet-float.eating .pet-bounce {
+  animation: pf-eatBounce 0.55s ease;
+}
+@keyframes pf-eatBounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.08); }
+  60%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.pet-float.eating #pet-mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pf-mouthChomp 0.28s ease-in-out 3;
+}
+@keyframes pf-mouthChomp {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.2); }
+}
+.pet-float.eating #pet-head {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: pf-headNod 0.34s ease-in-out 3;
+}
+@keyframes pf-headNod {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(-4deg); }
+}
+
+/* ------------------------------------------------------------
+   吃饱了：摇头
+   ------------------------------------------------------------ */
+.pet-float.shake .pet-bounce {
+  animation: pf-headShake 0.5s ease-in-out;
+}
+@keyframes pf-headShake {
+  0%, 100% { transform: rotate(0); }
+  20%      { transform: rotate(-9deg); }
+  45%      { transform: rotate(8deg); }
+  70%      { transform: rotate(-6deg); }
+  90%      { transform: rotate(4deg); }
+}
+
+/* ------------------------------------------------------------
+   喝水动画：头部轻微后仰再回正 + 身体轻弹
+   ------------------------------------------------------------ */
+.pet-float.drinking .pet-bounce {
+  animation: pf-drinkBounce 0.5s ease;
+}
+@keyframes pf-drinkBounce {
+  0%, 100% { transform: scale(1); }
+  30%      { transform: scale(1.05); }
+  60%      { transform: scale(0.98); }
+}
+.pet-float.drinking #pet-head {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: pf-headDrink 0.5s ease;
+}
+@keyframes pf-headDrink {
+  0%, 100% { transform: rotate(0deg); }
+  40%      { transform: rotate(-9deg); } /* 轻微后仰 */
+}
+
+/* ------------------------------------------------------------
+   飞行层（全屏、不拦截点击）
+   ------------------------------------------------------------ */
+#pet-fly-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483647;
+}
+#pet-fly-layer .food-fly {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+#pet-fly-layer .food-fly img,
+#pet-fly-layer .food-fly svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------------
+   无障碍：用户偏好“减少动态效果”时，关闭循环动画
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .pet-float .pet-breathe,
+  .pet-float .pet-blink,
+  .pet-float #pet-eye-left,
+  .pet-float #pet-eye-right,
+  .pet-float #pet-star-left,
+  .pet-float #pet-star-right-top,
+  .pet-float #pet-star-right-gold {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   心情徽章（头顶上方，常驻）
+   ------------------------------------------------------------ */
+.pet-float .pet-mood {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 15px;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 4;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+.pet-float .pet-mood img {
+  width: 22px;
+  height: 22px;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* ------------------------------------------------------------
+   缓慢漂浮移动：用 transform 微调身体层位置，幅度小不遮挡阅读区。
+   悬停 / 拖动 / 收起 / 鼠标靠近 / 散步时暂停。
+   ------------------------------------------------------------ */
+.pet-float-body {
+  animation: pf-drift 14s ease-in-out infinite;
+}
+.pet-float:hover .pet-float-body,
+.pet-float.dragging .pet-float-body,
+.pet-float.collapsed .pet-float-body,
+.pet-float.nearby .pet-float-body,
+.pet-float.edge-walk .pet-float-body {
+  animation-play-state: paused;
+}
+@keyframes pf-drift {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(10px, -8px); }
+  50%      { transform: translate(-6px, 6px); }
+  75%      { transform: translate(8px, -4px); }
+}
+
+/* ------------------------------------------------------------
+   心情局部动画：困 → 眼睛半闭
+   ------------------------------------------------------------ */
+.pet-float.mood-sleepy #pet-eye-left,
+.pet-float.mood-sleepy #pet-eye-right {
+  animation: none;
+  transform: scaleY(0.25);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ------------------------------------------------------------
+   主动小动作（transform / opacity，避免重排）
+   ------------------------------------------------------------ */
+.pet-float.action-yawn #pet-head {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: pf-actYawn 1.2s ease-in-out 2;
+}
+@keyframes pf-actYawn {
+  0%, 100% { transform: rotate(0deg); }
+  40%      { transform: rotate(-9deg) translateY(-3px); }
+  70%      { transform: rotate(-4deg); }
+}
+
+.pet-float.action-stretch .pet-bounce {
+  transform-origin: 50% 100%;
+  animation: pf-actStretch 1.2s ease-in-out 2;
+}
+@keyframes pf-actStretch {
+  0%, 100% { transform: scale(1); }
+  40%      { transform: scale(1.1, 1.18); }
+  70%      { transform: scale(0.98); }
+}
+
+.pet-float.action-wag .pet-bounce {
+  transform-origin: 50% 100%;
+  animation: pf-actWag 0.4s ease-in-out 4;
+}
+@keyframes pf-actWag {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(10deg); }
+}
+
+.pet-float.action-look .pet-bounce {
+  transform-origin: 50% 100%;
+  animation: pf-actLook 1.4s ease-in-out 2;
+}
+@keyframes pf-actLook {
+  0%, 100% { transform: rotate(0deg); }
+  30%      { transform: rotate(-5deg); }
+  70%      { transform: rotate(5deg); }
+}
+
+.pet-float.action-sleep .pet-bounce {
+  animation: pf-actSleepBob 2.5s ease-in-out infinite;
+}
+@keyframes pf-actSleepBob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(3px) scale(0.985); }
+}
+.pet-float.action-sleep #pet-eye-left,
+.pet-float.action-sleep #pet-eye-right {
+  animation: none;
+  transform: scaleY(0.15);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ------------------------------------------------------------
+   点击不同部位的反应（仅当 SVG 有对应部件时生效）
+   ------------------------------------------------------------ */
+.pet-float.squint #pet-eye-left,
+.pet-float.squint #pet-eye-right {
+  animation: none;
+  transform: scaleY(0.5);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pet-float.tail-touch #pet-tail {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pf-tailRetract 0.4s ease;
+}
+@keyframes pf-tailRetract {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(0.6, 0.8); }
+}
+.pet-float.paw-touch #pet-paw-left,
+.pet-float.paw-touch #pet-paw-right {
+  transform-box: fill-box;
+  transform-origin: center top;
+  animation: pf-pawLift 0.45s ease;
+}
+@keyframes pf-pawLift {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(-10deg); }
+}
+
+/* ------------------------------------------------------------
+   无障碍：用户偏好“减少动态效果”时，关闭新增循环动画
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .pet-float-body,
+  .pet-float.mood-hungry .pet-breathe,
+  .pet-float.mood-thirsty .pet-breathe,
+  .pet-float.mood-angry .pet-breathe,
+  .pet-float.edge-walk .pet-bounce {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   心情局部动画：作用于身体层（避免与弹跳/眨眼冲突）
+   ------------------------------------------------------------ */
+.pet-float.mood-happy .pet-breathe { animation-duration: 2.2s; }
+.pet-float.mood-hungry .pet-breathe,
+.pet-float.mood-thirsty .pet-breathe {
+  animation: pf-moodSway 2.6s ease-in-out infinite;
+}
+@keyframes pf-moodSway {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-3px) rotate(-1.5deg); }
+  75%      { transform: translateY(-1px) rotate(1.5deg); }
+}
+.pet-float.mood-angry .pet-breathe {
+  animation: pf-moodAngry 3s ease-in-out infinite;
+}
+@keyframes pf-moodAngry {
+  0%, 86%, 100% { transform: translateY(0); }
+  90%           { transform: translateX(-2px) rotate(-2deg); }
+  94%           { transform: translateX(2px) rotate(2deg); }
+  98%           { transform: translateX(-1px); }
+}
+
+/* ------------------------------------------------------------
+   散步（走到屏幕边缘）：身体层走路上下起伏
+   ------------------------------------------------------------ */
+.pet-float.edge-walk .pet-bounce {
+  animation: pf-walkBob 0.4s ease-in-out infinite;
+}
+@keyframes pf-walkBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-3px) rotate(-3deg); }
+}
+
+/* ------------------------------------------------------------
+   pet-ui：环形菜单 + 状态面板的定位容器（JS 边缘检测时整体平移）
+   ------------------------------------------------------------ */
+.pet-float .pet-ui {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   环形功能菜单（点击宠物后弹出，围绕宠物均匀分布）
+   悬浮层半径更小，避免遮挡网页；按钮恢复 pointer-events 可点击。
+   ------------------------------------------------------------ */
+.pet-float .ring-menu {
+  position: absolute;
+  inset: 0;
+  --ring-r: 92px;
+  z-index: 15;
+  pointer-events: none;
+}
+.pet-float .ring-menu[hidden] { display: none; }
+
+.pet-float .ring-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46px;
+  height: 52px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  pointer-events: auto;
+  opacity: 0;
+  --angle: calc(135deg - var(--i) * 90deg);
+  transform: translate(-50%, -50%) rotate(var(--angle)) translate(var(--ring-r)) rotate(calc(0deg - var(--angle)));
+  transition: opacity 0.18s ease;
+}
+.pet-float .ring-menu.show .ring-btn {
+  opacity: 1;
+  transition-delay: calc(var(--i) * 40ms);
+}
+.pet-float .ring-menu:not(.show) .ring-btn {
+  pointer-events: none;
+}
+
+.pet-float .ring-btn-inner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.pet-float .ring-btn-inner img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.pet-float .ring-btn:hover .ring-btn-inner {
+  transform: scale(1.16);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.26);
+}
+.pet-float .ring-menu.show .ring-btn-inner {
+  animation: pf-ringPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation-delay: calc(var(--i) * 40ms);
+}
+@keyframes pf-ringPop {
+  from { transform: scale(0.2); }
+  to   { transform: scale(1); }
+}
+
+.pet-float .ring-label {
+  font-size: 10px;
+  color: #7a5c4f;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 1px 5px;
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+.pet-float .ring-btn:hover .ring-label {
+  transform: scale(1.1);
+}
+
+/* ------------------------------------------------------------
+   状态面板（点击宠物后显示在宠物上方，淡入淡出，不遮挡宠物）
+   ------------------------------------------------------------ */
+.pet-float .status-panel {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 86px);
+  transform: translateX(-50%) translateY(6px);
+  width: 168px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  z-index: 16;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.pet-float .status-panel[hidden] { display: none; }
+.pet-float .status-panel.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.pet-float .stat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  margin: 4px 0;
+}
+.pet-float .stat-key {
+  width: 38px;
+  flex: none;
+  color: #b79a8c;
+}
+.pet-float .stat-bar {
+  flex: 1;
+  height: 7px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.pet-float .stat-fill {
+  display: block;
+  height: 100%;
+  width: 50%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.pet-float .stat-fill-food { background: linear-gradient(90deg, #ffd8a8, #ff8a65); }
+.pet-float .stat-fill-drink { background: linear-gradient(90deg, #c9ecff, #5fb3e8); }
+.pet-float .stat-fill-energy { background: linear-gradient(90deg, #d3f2c8, #5cb85c); }
+.pet-float .stat-val {
+  flex: none;
+  min-width: 40px;
+  margin-left: auto;
+  text-align: right;
+  color: #7a5c4f;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------
+   插画粒子（蝴蝶结 / 棒棒糖 / 花花，替换 emoji 爱心）
+   ------------------------------------------------------------ */
+.pet-float .fx-img {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  animation: pf-fxFloat 1.2s ease-out forwards;
+  will-change: transform, opacity;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* ------------------------------------------------------------
+   讨厌食物：苦脸 / 拒绝（摇头 + 头部轻微后仰）
+   ------------------------------------------------------------ */
+.pet-float.bitter .pet-bounce {
+  animation: pf-bitterShake 0.6s ease-in-out;
+}
+@keyframes pf-bitterShake {
+  0%, 100% { transform: rotate(0); }
+  20%      { transform: rotate(-8deg) translateY(-2px); }
+  45%      { transform: rotate(7deg); }
+  70%      { transform: rotate(-5deg); }
+  90%      { transform: rotate(3deg); }
+}
+.pet-float.bitter #pet-head {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: pf-bitterHead 0.6s ease;
+}
+@keyframes pf-bitterHead {
+  0%, 100% { transform: rotate(0deg); }
+  40%      { transform: rotate(8deg); } /* 后仰，配合苦脸 */
+}
+
+/* ------------------------------------------------------------
+   聊天面板（点击“我想和你聊天～”气泡后，在宠物上方展开）
+   ------------------------------------------------------------ */
+.pet-float .pet-chat-panel {
+  position: absolute;
+  bottom: calc(100% + 8px);   /* 面板在宠物上方展开 */
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 208px;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+  z-index: 20;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.pet-float .pet-chat-panel[hidden] { display: none; }
+.pet-float .pet-chat-panel.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.pet-float .chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-bottom: 1px solid #f0e6dc;
+  background: #fffaf4;
+}
+.pet-float .chat-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a5c4f;
+}
+.pet-float .chat-close {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  color: #c3a99c;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.pet-float .chat-close:hover { color: #7a5c4f; }
+
+.pet-float .chat-body {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 250px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.pet-float .chat-body::-webkit-scrollbar { width: 5px; }
+.pet-float .chat-body::-webkit-scrollbar-thumb { background: #ecd9c8; border-radius: 3px; }
+
+.pet-float .chat-line {
+  max-width: 88%;
+  padding: 5px 9px;
+  border-radius: 11px;
+  font-size: 12px;
+  line-height: 1.4;
+  word-break: break-word;
+  animation: pf-chatIn 0.22s ease;
+}
+.pet-float .chat-pet {
+  align-self: flex-start;
+  background: #fff1e3;
+  color: #7a5c4f;
+  border-top-left-radius: 3px;
+}
+.pet-float .chat-user {
+  align-self: flex-end;
+  background: #ffe2c4;
+  color: #7a5c4f;
+  border-top-right-radius: 3px;
+}
+
+.pet-float .chat-options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-self: stretch;
+  padding-top: 2px;
+}
+.pet-float .chat-option {
+  border: 1px solid #f0d9b8;
+  background: #fff;
+  border-radius: 9px;
+  padding: 6px 9px;
+  font-size: 12px;
+  color: #7a5c4f;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.pet-float .chat-option:hover {
+  background: #fff7ec;
+  border-color: #f5a623;
+}
+.pet-float .chat-option:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@keyframes pf-chatIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

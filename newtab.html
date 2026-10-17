@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新标签页</title>
+  <link rel="stylesheet" href="newtab.css">
+</head>
+<body>
+  <div class="app">
+    <p class="greeting" id="greeting">你好呀 👋</p>
+
+    <!--
+      宠物展示区（由外到内的动画层，全部只使用 transform，避免触发重排）：
+      - pet-breathe：身体呼吸浮动（上下平移 + 轻微缩放）
+      - pet-blink：眨眼（眼部件不可拆分时，对整体做轻微挤压）
+      - pet-bounce：点击 / 吃东西 / 摇头时弹跳（由 JS 加 .bounce / .eating / .shake 类触发）
+      - pet-svg：内联 SVG 注入点（由 newtab.js 拉取 assets/ 的 SVG 并注入）
+      - pet-bubble：气泡提示（“我饿了～” / “吃不下了～”）
+      - status-panel：状态面板（点击宠物后显示，替代原来固定显示在下方状态条）
+      - ring-menu：环形功能菜单（点击宠物后显示，由 JS 依据 C.ACTION_ICONS 生成）
+      - food-panel：食物/饮品列表（点击“喂食/喂水”图标后展开，横向滑动）
+    -->
+    <div class="pet-stage" id="pet-stage">
+      <div class="pet-bubble" id="pet-bubble" hidden></div>
+      <span class="pet-mood" id="pet-mood"></span>
+      <div class="pet-breathe">
+        <div class="pet-blink">
+          <div class="pet-bounce" id="pet-bounce">
+            <div class="pet-svg" id="pet-svg"></div>
+          </div>
+        </div>
+      </div>
+      <div id="fx-layer"></div>
+
+      <!-- 状态面板：饱腹 / 口渴 / 精力 / 心情 / 亲密度 / 健康 -->
+      <div class="status-panel" id="status-panel" hidden>
+        <div class="stat-row">
+          <span class="stat-key">饱腹</span>
+          <div class="stat-bar"><i class="stat-fill stat-fill-food" id="stat-fullness"></i></div>
+          <b class="stat-val" id="stat-fullness-val">50%</b>
+        </div>
+        <div class="stat-row">
+          <span class="stat-key">口渴</span>
+          <div class="stat-bar"><i class="stat-fill stat-fill-drink" id="stat-thirst"></i></div>
+          <b class="stat-val" id="stat-thirst-val">50%</b>
+        </div>
+        <div class="stat-row">
+          <span class="stat-key">精力</span>
+          <div class="stat-bar"><i class="stat-fill stat-fill-energy" id="stat-energy"></i></div>
+          <b class="stat-val" id="stat-energy-val">80%</b>
+        </div>
+        <div class="stat-row">
+          <span class="stat-key">心情</span>
+          <b class="stat-val" id="stat-mood">🙂 普通</b>
+        </div>
+        <div class="stat-row">
+          <span class="stat-key">亲密度</span>
+          <b class="stat-val" id="stat-intimacy">Lv.1 初识</b>
+        </div>
+        <div class="stat-row">
+          <span class="stat-key">健康</span>
+          <b class="stat-val" id="stat-health">健康</b>
+        </div>
+      </div>
+
+      <!-- 环形功能菜单（由 JS 生成按钮） -->
+      <div class="ring-menu" id="ring-menu" hidden></div>
+
+      <!-- 食物/饮品列表弹层 -->
+      <div class="food-panel" id="food-panel" hidden></div>
+
+      <!-- 聊天面板（点击“我想和你聊天”气泡后打开） -->
+      <div class="chat-panel" id="chat-panel" hidden>
+        <div class="chat-header">
+          <span class="chat-title" id="chat-title">聊天</span>
+          <button type="button" class="chat-close" id="chat-close" title="结束聊天">×</button>
+        </div>
+        <div class="chat-body" id="chat-body"></div>
+      </div>
+    </div>
+
+    <p class="pet-name" id="pet-name"></p>
+    <p class="hint">点击宠物弹出功能菜单与状态 · 摸摸不同部位有不同反应</p>
+  </div>
+
+  <!-- 食物飞行动画层（fixed 全屏覆盖，不拦截点击） -->
+  <div id="fly-layer"></div>
+
+  <script src="pets.js"></script>
+  <script src="food.js"></script>
+  <script src="companion.js"></script>
+  <script src="preferences.js"></script>
+  <script src="chat.js"></script>
+  <script src="newtab.js"></script>
+</body>
+</html>
